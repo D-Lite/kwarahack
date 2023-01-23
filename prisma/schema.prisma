@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+    id String @id @default(uuid())
+    firstName String @map("first_name")
+    lastName String @map("last_name")
+    phoneNumber String @unique @map("phone_number")
+    email String? @unique
+    createdDate DateTime @default(now()) @map("created_date")
+
+
+    @@map("patients")
+}
+
+model Workforce { // health care provider
+  id String @default(uuid()) @id
+  role WorkforceRole
+  firstName String @map("first_name")
+  lastName String @map("last_name")
+  idCardType WorkforceIDType? @map("id_card_type")
+  email String @unique
+  username String @unique
+  idNumber String? @map("id_number")
+  isAvailable Boolean @default(false) @map("is_available")
+
+
+  @@map("workforces")
+}
+
+model Prescription {
+    id Int @default(autoincrement()) @id
+    patient Patient @relation(fields: [patientId], references: [id])
+    prescriptions array // separated by comma
+    physician String
+    pharmacist String?
+    dateOfPrescription DateTime @default(now()) @map("date_of_prescription")
+    dateOfCollection String? @map("date_of_collection")
+
+    @@map("prescriptions")
+}
+
+
+enum WorkforceRole {
+  DOCTOR
+  PHAMARCIST
+  NURSE
+  MD //Medical Director === ADMIN
+  MH // Ministry of Health
+}
+
+enum WorkforceIDType {
+  NMA // Nigeria Medical Association
+  NURSINGCOUNCIL
+  NPA // National Pharmacist Association
+}
