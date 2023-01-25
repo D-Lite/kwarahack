@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Patient {
@@ -17,10 +18,16 @@ model Patient {
     phoneNumber String @unique @map("phone_number")
     email String? @unique
     createdDate DateTime @default(now()) @map("created_date")
-
+    lastUpdated DateTime @default(now()) @map("last_updated")
+    dateOfBirth DateTime @map("date_of_birth")
+    allergies String? @map("allergies")
+    knownDiseaseHistory String? @map("known_disease_history")
+    bloodGroup String?  @map("blood_group")
+    genotype String?  @map("genotype")
 
     @@map("patients")
 }
+
 
 model Workforce { // health care provider
   id String @default(uuid()) @id
@@ -39,12 +46,12 @@ model Workforce { // health care provider
 
 model Prescription {
     id Int @default(autoincrement()) @id
-    patient Patient @relation(fields: [patientId], references: [id])
-    prescriptions array // separated by comma
+    patientId Int?
+    prescriptions String[] // separated by comma
     physician String
     pharmacist String?
     dateOfPrescription DateTime @default(now()) @map("date_of_prescription")
-    dateOfCollection String? @map("date_of_collection")
+    dateOfCollection DateTime? @map("date_of_collection")
 
     @@map("prescriptions")
 }
