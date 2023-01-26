@@ -6,56 +6,53 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Patient {
-    id String @id @default(uuid())
-    firstName String @map("first_name")
-    lastName String @map("last_name")
-    phoneNumber String @unique @map("phone_number")
-    email String? @unique
-    createdDate DateTime @default(now()) @map("created_date")
-    lastUpdated DateTime @default(now()) @map("last_updated")
-    dateOfBirth DateTime @map("date_of_birth")
-    allergies String? @map("allergies")
-    knownDiseaseHistory String? @map("known_disease_history")
-    bloodGroup String?  @map("blood_group")
-    genotype String?  @map("genotype")
+  id                  String   @id @default(uuid())
+  firstName           String   @map("first_name")
+  lastName            String   @map("last_name")
+  phoneNumber         String   @unique @map("phone_number")
+  email               String?  @unique
+  createdDate         DateTime @default(now()) @map("created_date")
+  lastUpdated         DateTime @default(now()) @map("last_updated")
+  dateOfBirth         DateTime @map("date_of_birth")
+  allergies           String?  @map("allergies")
+  knownDiseaseHistory String?  @map("known_disease_history")
+  bloodGroup          String?  @map("blood_group")
+  genotype            String?  @map("genotype")
 
-    @@map("patients")
+  @@map("patients")
 }
 
-
-model Workforce { // health care provider
-  id String @default(uuid()) @id
-  role WorkforceRole
-  firstName String @map("first_name")
-  lastName String @map("last_name")
-  idCardType WorkforceIDType? @map("id_card_type")
-  email String @unique
-  username String @unique
-  idNumber String? @map("id_number")
-  isAvailable Boolean @default(false) @map("is_available")
-
+model Workforce {
+  id          String           @id @default(uuid())
+  role        WorkforceRole
+  firstName   String           @map("first_name")
+  lastName    String           @map("last_name")
+  idCardType  WorkforceIDType? @map("id_card_type")
+  email       String           @unique
+  username    String           @unique
+  idNumber    String?          @map("id_number")
+  isAvailable Boolean          @default(false) @map("is_available")
 
   @@map("workforces")
 }
 
 model Prescription {
-    id Int @default(autoincrement()) @id
-    patientId Int?
-    prescriptions String[] // separated by comma
-    physician String
-    pharmacist String?
-    dateOfPrescription DateTime @default(now()) @map("date_of_prescription")
-    dateOfCollection DateTime? @map("date_of_collection")
+  id                 Int       @id @default(autoincrement())
+  patientId          Int?
+  prescriptions      String[] // separated by comma
+  physician          String
+  pharmacist         String?
+  dateOfPrescription DateTime  @default(now()) @map("date_of_prescription")
+  dateOfCollection   DateTime? @map("date_of_collection")
 
-    @@map("prescriptions")
+  @@map("prescriptions")
 }
-
 
 enum WorkforceRole {
   DOCTOR
