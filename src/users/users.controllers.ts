@@ -16,7 +16,7 @@ import { UsersService } from './users.service';
 
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { AuthGuard } from '@nestjs/passport';
-import { UpdatePatientPasswordDto } from './users.user.dto';
+import { UpdatePatientPasswordDto } from './dto/patient.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -28,7 +28,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
   public async me(@Request() req) {
-    return new RenderUser(req.user);
+    return new (req.user);
   }
   @UseGuards(JwtAuthGuard)
   @ApiSecurity('access-key')

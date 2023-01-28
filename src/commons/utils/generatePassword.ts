@@ -13,4 +13,5 @@ export default function generateUID(dob) {
   final = final + '' + val + '' + day + '' + val2;
 
   return final;
+  // KW-1234-056-12
 }

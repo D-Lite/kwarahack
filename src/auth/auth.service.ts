@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreatePatientDto, LoginPatientDto } from '../users/users.user.dto';
+import { CreatePatientDto, LoginPatientDto } from '../users/dto/patient.dto';
 import { JwtPayload } from './jwt.strategy';
 import { PrismaService } from '../prisma/prisma.service';
 import { Patient } from '@prisma/client';
@@ -17,9 +17,10 @@ export class AuthService {
   ) {}
 
   async register(patientDto: CreatePatientDto): Promise<RegistrationStatus> {
-    let status: RegistrationStatus = {
+    let status: GenericStatus<Patient> = {
       success: true,
       message: 'ACCOUNT_CREATE_SUCCESS',
+      data: patientDto
     };
 
     try {
@@ -64,10 +65,10 @@ export class AuthService {
   }
 }
 
-export interface RegistrationStatus {
+export interface GenericStatus<T> {
   success: boolean;
   message: string;
-  data?: Patient;
+  data?: T;
 }
 export interface RegistrationSeederStatus {
   success: boolean;

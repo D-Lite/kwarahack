@@ -1,18 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreatePatientDto, LoginPatientDto, UpdatePatientPasswordDto
-} from './users.user.dto';
+import {
+  CreatePatientDto,
+  LoginPatientDto,
+  UpdatePatientPasswordDto,
+} from './dto/patient.dto';
 import { compare, hash } from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
-import {Patient} from "@prisma/client";
-import generateUID from "../commons/utils/generatePassword";
+import { Patient } from '@prisma/client';
+import generateUID from '../commons/utils/generatePassword';
 
 interface FormatPatientLogin extends Partial<Patient> {
-  compoundId: string
+  compoundId: string;
 }
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   //use by patient module to update patient module
   async updatePatientPassword(
@@ -20,7 +22,7 @@ export class UsersService {
     id: string,
   ): Promise<Patient> {
     const patient = await this.prisma.patient.findUnique({
-      where: {id}
+      where: { id },
     });
 
     if (!patient) {
@@ -28,73 +30,68 @@ export class UsersService {
     }
     // compare password
     const areEqual = await compare(payload.old_password, patient.password);
-    if(!areEqual) {
+    if (!areEqual) {
       throw new HttpException('Invalid_credentials', HttpStatus.UNAUTHORIZED);
     }
 
     return this.prisma.patient.update({
       where: { id },
-      data: { password: await hash(payload.new_password, 10) }
+      data: { password: await hash(payload.new_password, 10) },
     });
   }
 
   //use by auth module to register user in database
-  async createPatient(patientDTO: CreatePatientDto) : Promise<any> {
+  async createPatient(patientDTO: CreatePatientDto): Promise<any> {
     //check if the user exist in the db
     const userInDb = await this.prisma.patient.findFirst({
-      where: {compoundId: patientDTO.compoundId}
+      where: { compoundId: patientDTO.compoundId },
     });
 
     if (userInDb) {
-      throw new HttpException("user_already_exist", HttpStatus.CONFLICT);
+      throw new HttpException('user_already_exist', HttpStatus.CONFLICT);
     }
 
-    const newPatientId = async () => {
-      let check  = await generateUID(patientDTO.dateOfBirth)
-      const userInDb = await this.prisma.patient.findFirst({
-        where: {compoundId: check}
-      });
+    const newPatientId = async (dob) => {
+      const check = await generateUID(dob);
+      return check;
+    };
 
-      if(userInDb) {
-        newPatientId()
-      }
-      else {
-        return check
-      }
-    }
     return this.prisma.patient.create({
-      ...(patientDTO),
-      compoundId: await newPatientId()
-      password: await hash(patientDTO, 10)
-    })
+      data: {
+        ...patientDTO,
+        compoundId: await newPatientId(patientDTO.dateOfBirth),
+        password: await hash(patientDTO, 10),
+      },
+    });
   }
 
   // use by auth module to login user
-  async findByLogin({compoundId, password}: LoginPatientDto): Promise<FormatPatientLogin> {
+  async findByLogin({
+    compoundId,
+    password,
+  }: LoginPatientDto): Promise<FormatPatientLogin> {
     const user = await this.prisma.patient.findFirst({
-      where: {compoundId}
+      where: { compoundId },
     });
 
     if (!user) {
-      throw new HttpException("invalid_credentials", HttpStatus.UNAUTHORIZED);
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
     }
 
     // compare passwords
     const areEqual = await compare(password, user.password);
     if (!areEqual) {
-      throw new HttpException("invalid_credentials", HttpStatus.UNAUTHORIZED);
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
     }
 
-    const {password: p, ...rest} = user;
+    const { password: p, ...rest } = user;
     return rest;
   }
 
   // use by auth module to get user in database
-  async findByPayload({compoundId}: any): Promise<any> {
+  async findByPayload({ compoundId }: any): Promise<any> {
     return await this.prisma.patient.findFirst({
-      where: {compoundId}
-    })
+      where: { compoundId },
+    });
   }
 }
-
-

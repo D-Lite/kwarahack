@@ -12,15 +12,11 @@ import {
   RegistrationSeederStatus,
   RegistrationStatus,
 } from './auth.service';
-// import {
-//   RenderSeederUser,
-//   SeedUserDto,
-//   UserRole,
-// } from '../users/user.dto';
+
 import {
   CreatePatientDto,
   LoginPatientDto,
-} from "../users/users.user.dto";
+} from "../users/dto/patient.dto";
 
 import { ApiBearerAuth, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
