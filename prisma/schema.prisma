@@ -13,12 +13,14 @@ datasource db {
 
 model Patient {
   id                  String   @id @default(uuid())
+  compoundId          String   @unique @map("compound_id")// generated from our end
   firstName           String   @map("first_name")
   lastName            String   @map("last_name")
   phoneNumber         String   @unique @map("phone_number")
+  password            String
   email               String?  @unique
   createdDate         DateTime @default(now()) @map("created_date")
-  lastUpdated         DateTime @default(now()) @map("last_updated")
+  lastUpdated         DateTime @default(now()) @map("last_updated") @updatedAt
   dateOfBirth         DateTime @map("date_of_birth")
   allergies           String?  @map("allergies")
   knownDiseaseHistory String?  @map("known_disease_history")
@@ -38,6 +40,8 @@ model Workforce {
   username    String           @unique
   idNumber    String?          @map("id_number")
   isAvailable Boolean          @default(false) @map("is_available")
+  createdDate DateTime @default(now()) @map("created_date")
+  lastUpdated DateTime @default(now()) @map("last_updated") @updatedAt
 
   @@map("workforces")
 }
