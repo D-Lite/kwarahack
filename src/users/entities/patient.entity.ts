@@ -1,7 +1,8 @@
 import { Patient } from '@prisma/client';
 import { Expose } from 'class-transformer';
+import { ResponseEntity } from 'src/commons/interfaces/response-entity.interface';
 
-export class PatientEntity implements Partial<Patient> {
+class PatientEntity implements Partial<Patient> {
   constructor(partial: Partial<Patient>) {
     Object.assign(this, partial);
   }
@@ -30,9 +31,6 @@ export class PatientEntity implements Partial<Patient> {
   @Expose()
   dateOfBirth: Date;
 
-  /**
-   * @example 'Anti-pepper'
-   */
   @Expose()
   allergies: string[];
 
@@ -42,9 +40,6 @@ export class PatientEntity implements Partial<Patient> {
   @Expose()
   bloodGroup: string;
 
-  /**
-   * @example 'Malaria'
-   */
   @Expose()
   knownDiseaseHistory: string[];
 
@@ -53,4 +48,21 @@ export class PatientEntity implements Partial<Patient> {
    */
   @Expose()
   genotype: string;
+}
+
+export class PatientResponseEntity implements ResponseEntity<PatientEntity> {
+  constructor(message: string, success: boolean, data?: Partial<Patient>) {
+    this.message = message;
+    this.success = success;
+    this.data = new PatientEntity(data);
+  }
+
+  @Expose()
+  message: string;
+
+  @Expose()
+  data?: PatientEntity;
+
+  @Expose()
+  success: boolean;
 }
