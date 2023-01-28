@@ -5,7 +5,6 @@ import { CreatePatientDto, LoginPatientDto } from '../users/dto/patient.dto';
 import { JwtPayload } from './jwt.strategy';
 import { PrismaService } from '../prisma/prisma.service';
 import { Patient } from '@prisma/client';
-import { hash } from 'bcrypt';
 // import {User} from "../users/user.entity";
 
 @Injectable()
@@ -16,22 +15,22 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  async register(patientDto: CreatePatientDto): Promise<RegistrationStatus> {
-    let status: GenericStatus<Patient> = {
+  async register(patientDto: CreatePatientDto) {
+    /* let status: GenericStatus<Patient> = {
       success: true,
       message: 'ACCOUNT_CREATE_SUCCESS',
-      data: patientDto
-    };
+      data: ,
+    }; */
+    let patient: Patient;
 
     try {
-      status.data = await this.usersService.createPatient(patientDto);
+      patient = await this.usersService.createPatient(patientDto);
     } catch (err) {
-      status = {
-        success: false,
-        message: err,
-      };
+      // You can catch and then throw more specific errors here
+      throw err;
     }
-    return status;
+
+    return patient;
   }
 
   async login(loginPatientDto: LoginPatientDto): Promise<any> {

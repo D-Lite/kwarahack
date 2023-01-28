@@ -26,6 +26,7 @@ model Patient {
   bloodGroup          String?  @map("blood_group")
   genotype            String?  @map("genotype")
 
+  appointment         Appointment[]
   @@map("patients")
 }
 
@@ -41,7 +42,7 @@ model Workforce {
   isAvailable Boolean          @default(false) @map("is_available")
   createdDate DateTime @default(now()) @map("created_date")
   lastUpdated DateTime @default(now()) @map("last_updated") @updatedAt
-
+  appointment Appointment[]
   @@map("workforces")
 }
 
@@ -69,4 +70,16 @@ enum WorkforceIDType {
   NMA // Nigeria Medical Association
   NURSINGCOUNCIL
   NPA // National Pharmacist Association
+}
+
+model Appointment {
+  id      String @id @default(uuid())
+  patient Patient @relation(fields: [patientId], references: [compoundId])
+  patientId String @map("patient_id")
+  workforce Workforce @relation(fields: [workforceId], references: [id])
+  workforceId String @map("workforce_id")
+  selectedDate DateTime @map("selected_date")
+  confirm Boolean @default(false)
+
+
 }
