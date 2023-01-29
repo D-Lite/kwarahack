@@ -17,7 +17,7 @@ model Patient {
   lastName            String   @map("last_name")
   phoneNumber         String   @unique @map("phone_number")
   password            String
-  email               String?  @unique
+  email               String?
   createdDate         DateTime @default(now()) @map("created_date")
   lastUpdated         DateTime @default(now()) @updatedAt @map("last_updated")
   dateOfBirth         DateTime? @map("date_of_birth")
