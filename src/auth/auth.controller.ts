@@ -1,16 +1,26 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   HttpException,
   HttpStatus,
   Post,
+  Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-import { CreatePatientDto, LoginPatientDto } from '../users/dto/patient.dto';
+import {
+  CreatePatientDto,
+  LoginPatientDto,
+  UpdatePatientPasswordDto,
+} from '../users/dto/patient.dto';
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { PatientResponseEntity } from 'src/users/entities/patient.entity';
+import { JwtAuthGuard } from './jwt.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -28,5 +38,23 @@ export class AuthController {
     @Body() loginPatientDto: LoginPatientDto,
   ): Promise<any> {
     return await this.authService.login(loginPatientDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiSecurity('access-key')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Put('patient/password')
+  public async updatePassword(
+    @Request() req,
+    @Body()
+    updatePatientPasswordDto: UpdatePatientPasswordDto,
+  ) {
+    await this.authService.updatePatientPassword(
+      updatePatientPasswordDto,
+      req.user.id,
+    );
+    return {
+      message: 'password_update_success',
+    };
   }
 }

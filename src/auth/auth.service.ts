@@ -1,7 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { CreatePatientDto, LoginPatientDto } from '../users/dto/patient.dto';
+
+import {
+  CreatePatientDto,
+  LoginPatientDto,
+  UpdatePatientPasswordDto,
+} from '../users/dto/patient.dto';
 import { JwtPayload } from './jwt.strategy';
 import { PrismaService } from '../prisma/prisma.service';
 import { Patient } from '@prisma/client';
@@ -46,6 +52,25 @@ export class AuthService {
     };
   }
 
+  async updatePatientPassword(payload: UpdatePatientPasswordDto, id: string) {
+    const patient = await this.prisma.patient.findUnique({
+      where: { id },
+    });
+
+    if (!patient) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+    // compare password
+    const areEqual = await compare(payload.old_password, patient.password);
+    if (!areEqual) {
+      throw new HttpException('Invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return this.prisma.patient.update({
+      where: { id },
+      data: { password: await hash(payload.new_password, 10) },
+    });
+  }
   private _createToken({ compoundId }): any {
     const user: JwtPayload = { compoundId };
     const Authorization = this.jwtService.sign(user);

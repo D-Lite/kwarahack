@@ -27,6 +27,7 @@ model Patient {
   genotype            String?  @map("genotype")
 
   appointment         Appointment[]
+  medicalrecord       MedicalRecord[]
   @@map("patients")
 }
 
@@ -42,7 +43,9 @@ model Workforce {
   isAvailable Boolean          @default(false) @map("is_available")
   createdDate DateTime @default(now()) @map("created_date")
   lastUpdated DateTime @default(now()) @map("last_updated") @updatedAt
+
   appointment Appointment[]
+  medicalrecord  MedicalRecord[]
   @@map("workforces")
 }
 
@@ -82,4 +85,31 @@ model Appointment {
   confirm Boolean @default(false)
 
 
+}
+
+
+model MedicalRecord {
+  id          String @id @default(uuid())
+  patient     Patient @relation(fields: [patientId], references: [compoundId])
+  patientId   String @map("patient_id")
+  workforce Workforce @relation(fields: [workforceId], references: [id])
+  workforceId String @map("workforce_id")
+
+  bodytemperature       String?
+  pulse                 String?
+  respiratoryrate       String?
+  bloodsugar            String?
+  bodyfatpercent        String?
+  cholestrol            String?
+  hemoglobin            String?
+  whitebloodcell        String?
+  bmi                   String?
+  oxygenlevel           String?
+  bloodpressure         String?
+  weight                String?
+  createdDate         DateTime @default(now()) @map("created_date")
+
+
+
+  @@map("medicalrecords")
 }
