@@ -12,7 +12,7 @@ datasource db {
 
 model Patient {
   id                  String   @id @default(uuid())
-  compoundId          String   @unique @map("compound_id") // generated from our end
+  compoundId          String?   @unique @map("compound_id") // generated from our end
   firstName           String   @map("first_name")
   lastName            String   @map("last_name")
   phoneNumber         String   @unique @map("phone_number")
@@ -20,7 +20,7 @@ model Patient {
   email               String?  @unique
   createdDate         DateTime @default(now()) @map("created_date")
   lastUpdated         DateTime @default(now()) @updatedAt @map("last_updated")
-  dateOfBirth         DateTime @map("date_of_birth")
+  dateOfBirth         DateTime? @map("date_of_birth")
   allergies           String[] @map("allergies")
   knownDiseaseHistory String[] @map("known_disease_history")
   bloodGroup          String?  @map("blood_group")

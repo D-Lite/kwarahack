@@ -12,12 +12,11 @@ type UpdateAppointmentData = {
 export class AppointmentService {
   constructor(private prisma: PrismaService) {}
 
-  async createAppointment(createAppointmentDTO: AppointmentDto) {
+  async createAppointment(patientId: string, selectedDate: Date) {
     const appointment = await this.prisma.appointment.create({
       data: {
-        patientId: createAppointmentDTO.patientId,
-        confirm: true,
-        selectedDate: createAppointmentDTO.selectedDate,
+        patientId,
+        selectedDate,
       },
     });
 

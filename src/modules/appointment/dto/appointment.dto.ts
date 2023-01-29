@@ -5,10 +5,6 @@ import { Type } from 'class-transformer';
 export class AppointmentDto {
   @ApiProperty()
   @IsNotEmpty()
-  id: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
   patientId: string;
 
   @IsNotEmpty()

@@ -1,21 +1,12 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
-  Patch,
   Post,
-  Put,
-  Query,
-  Request,
-  UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { AppointmentService } from './appointment.service';
 
 import { AppointmentDto } from './dto/appointment.dto';
@@ -30,16 +21,14 @@ import { AppointmentResponseEntity } from './entities/appointment.entity';
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  @Auth('patient')
+  // @Auth('patient')
   @ApiException(() => [AppointmentNotFoundException])
   @HttpCode(HttpStatus.CREATED)
-  @Post('/patients/:patientId/appointments')
-  async createAppointment(
-    @Param() patientId: string,
-    @Body() appointmentDto: AppointmentDto,
-  ) {
+  @Post('/patients')
+  async createAppointment(@Body() appointmentDto: AppointmentDto) {
     const appointment = await this.appointmentService.createAppointment(
-      appointmentDto,
+      appointmentDto.patientId,
+      appointmentDto.selectedDate,
     );
 
     return new AppointmentResponseEntity(

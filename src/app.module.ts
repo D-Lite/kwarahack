@@ -10,6 +10,7 @@ import { PrismaService } from './modules/prisma/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { MedicalRecordsModule } from './modules/medical-records/medical-records.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MedicalRecordsModule } from './modules/medical-records/medical-records.
     AuthModule,
     UsersModule,
     MedicalRecordsModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
