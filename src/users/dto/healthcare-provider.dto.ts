@@ -10,3 +10,13 @@ export class LoginHealthcareProviderDto {
   @IsNotEmpty()
   readonly password: string;
 }
+
+export class RegisterHealthcareProviderDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  stateId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  password: string;
+}

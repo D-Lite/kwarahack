@@ -10,8 +10,11 @@ import {
 } from '../users/dto/patient.dto';
 import { JwtPayload } from './jwt.strategy';
 import { PrismaService } from '../prisma/prisma.service';
-import { Patient } from '@prisma/client';
-import { LoginHealthcareProviderDto } from '../users/dto/healthcare-provider.dto';
+import { HealthcareProvider, Patient } from '@prisma/client';
+import {
+  LoginHealthcareProviderDto,
+  RegisterHealthcareProviderDTO,
+} from '../users/dto/healthcare-provider.dto';
 // import {User} from "../users/user.entity";
 
 @Injectable()
@@ -40,6 +43,28 @@ export class AuthService {
     return patient;
   }
 
+  async registerhealthcareprovider(
+    healthcareProviderDTO: RegisterHealthcareProviderDTO,
+  ) {
+    /* let status: GenericStatus<Patient> = {
+      success: true,
+      message: 'ACCOUNT_CREATE_SUCCESS',
+      data: ,
+    }; */
+    let healthcare: HealthcareProvider;
+
+    try {
+      healthcare = await this.usersService.createHealthcare(
+        healthcareProviderDTO,
+      );
+    } catch (err) {
+      // You can catch and then throw more specific errors here
+      throw err;
+    }
+
+    return healthcare;
+  }
+
   async login(loginPatientDto: LoginPatientDto): Promise<any> {
     // find user in db
     const user = await this.usersService.findByLogin(loginPatientDto);
@@ -47,10 +72,7 @@ export class AuthService {
     // generate and sign token
     const token = this._createToken(user);
 
-    return {
-      ...token,
-      data: user,
-    };
+    return user;
   }
 
   async loginHealthcareProvider(
@@ -63,10 +85,7 @@ export class AuthService {
     // generate and sign token
     const token = this._createHealthcareToken(healthprovider);
 
-    return {
-      ...token,
-      data: healthprovider,
-    };
+    return healthprovider;
   }
 
   async updatePatientPassword(payload: UpdatePatientPasswordDto, id: string) {

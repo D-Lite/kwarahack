@@ -8,7 +8,7 @@ import { compare, hash } from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import generateUID from '../commons/utils/generatePassword';
 import { HealthcareProvider } from '@prisma/client';
-import { LoginHealthcareProviderDto } from './dto/healthcare-provider.dto';
+import { LoginHealthcareProviderDto, RegisterHealthcareProviderDTO } from "./dto/healthcare-provider.dto";
 
 @Injectable()
 export class UsersService {
@@ -38,13 +38,13 @@ export class UsersService {
   //use by auth module to register user in database
   async createPatient(patientDTO: CreatePatientDto) {
     //check if the user exist in the db
-    const userInDb = await this.prisma.patient.findFirst({
-      where: { compoundId: patientDTO.compoundId },
-    });
-
-    if (userInDb) {
-      throw new HttpException('user_already_exist', HttpStatus.CONFLICT);
-    }
+    // const userInDb = await this.prisma.patient.findFirst({
+    //   where: { compoundId: patientDTO.compoundId },
+    // });
+    //
+    // if (userInDb) {
+    //   throw new HttpException('user_already_exist', HttpStatus.CONFLICT);
+    // }
 
     const newPatientId = async (dob) => {
       const check = await generateUID(dob);
@@ -56,6 +56,24 @@ export class UsersService {
         ...patientDTO,
         compoundId: await newPatientId(patientDTO.dateOfBirth),
         password: await hash(patientDTO.password, 10),
+      },
+    });
+  }
+
+  async createHealthcare(healthcareProviderDTO: RegisterHealthcareProviderDTO) {
+    //check if the user exist in the db
+    // const userInDb = await this.prisma.patient.findFirst({
+    //   where: { compoundId: patientDTO.compoundId },
+    // });
+    //
+    // if (userInDb) {
+    //   throw new HttpException('user_already_exist', HttpStatus.CONFLICT);
+    // }
+
+    return this.prisma.healthcareProvider.create({
+      data: {
+        stateId: healthcareProviderDTO.stateId,
+        password: await hash(healthcareProviderDTO.password, 10),
       },
     });
   }

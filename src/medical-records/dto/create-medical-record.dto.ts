@@ -8,11 +8,6 @@ export class CreateMedicalRecordDto {
   patientId: string;
 
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  workforceId: string;
-
-  @IsString()
   @ApiProperty()
   @IsNotEmpty()
   @IsOptional()

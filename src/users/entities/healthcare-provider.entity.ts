@@ -11,4 +11,16 @@ class HealthcareProviderEntity implements Partial<HealthcareProvider> {
    */
   @Expose()
   stateId: string;
+
+  /**
+   * @example 'KWHP1202'
+   */
+  @Expose()
+  message: string;
+
+  /**
+   * @example 'KWHP1202'
+   */
+  @Expose()
+  success: boolean;
 }
