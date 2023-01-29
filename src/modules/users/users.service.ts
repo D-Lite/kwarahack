@@ -6,9 +6,12 @@ import {
 } from './dto/patient.dto';
 import { compare, hash } from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
-import generateUID from '../commons/utils/generatePassword';
+import generateUID from '../../commons/utils/generatePassword';
 import { HealthcareProvider } from '@prisma/client';
-import { LoginHealthcareProviderDto, RegisterHealthcareProviderDTO } from "./dto/healthcare-provider.dto";
+import {
+  LoginHealthcareProviderDto,
+  RegisterHealthcareProviderDTO,
+} from './dto/healthcare-provider.dto';
 
 @Injectable()
 export class UsersService {

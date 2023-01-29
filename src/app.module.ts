@@ -5,11 +5,11 @@ import '@sentry/tracing';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SentryModule } from './sentry/sentry.module';
-import { PrismaService } from './prisma/prisma.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { MedicalRecordsModule } from './medical-records/medical-records.module';
+import { SentryModule } from './modules/sentry/sentry.module';
+import { PrismaService } from './modules/prisma/prisma.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { MedicalRecordsModule } from './modules/medical-records/medical-records.module';
 
 @Module({
   imports: [

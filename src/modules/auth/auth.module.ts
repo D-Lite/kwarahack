@@ -7,7 +7,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { UsersService } from '../users/users.service';
 import { PrismaService } from '../prisma/prisma.service';
-import * as process from "process";
+import * as process from 'process';
 
 @Module({
   imports: [
@@ -26,9 +26,6 @@ import * as process from "process";
   ],
   controllers: [AuthController],
   providers: [AuthService, UsersService, JwtStrategy, PrismaService],
-  exports: [
-    PassportModule,
-    JwtModule
-  ]
+  exports: [PassportModule, JwtModule],
 })
 export class AuthModule {}

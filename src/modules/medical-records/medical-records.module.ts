@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MedicalRecordsService } from './medical-records.service';
 import { MedicalRecordsController } from './medical-records.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 
 @Module({
   controllers: [MedicalRecordsController],
