@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -55,13 +56,14 @@ export class AppointmentController {
   @HttpCode(HttpStatus.OK)
   @Patch('/workforce/:doctorId/appointments')
   async acceptAppointment(
-    @Param() workforceId: string,
+    @Param('id') workforceId: string,
     @Body() appointmentDto: AppointmentDto,
   ) {
     const appointment = await this.appointmentService.acceptAppointment({
       appointmentId: appointmentDto.id,
       confirm: appointmentDto.confirm,
       doctorId: appointmentDto.workforceId,
+      patientId: appointmentDto.patientId,
     });
     return new AppointmentResponseEntity(
       'Appointment accepted successfully',

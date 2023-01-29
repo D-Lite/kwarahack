@@ -21,6 +21,7 @@ import {
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { PatientResponseEntity } from 'src/users/entities/patient.entity';
 import { JwtAuthGuard } from './jwt.guard';
+import { LoginHealthcareProviderDto } from '../users/dto/healthcare-provider.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -38,6 +39,15 @@ export class AuthController {
     @Body() loginPatientDto: LoginPatientDto,
   ): Promise<any> {
     return await this.authService.login(loginPatientDto);
+  }
+
+  @Post('loginhealthcareprovider')
+  public async loginHealthcareProvider(
+    @Body() loginHealthcareProviderDto: LoginHealthcareProviderDto,
+  ): Promise<any> {
+    return await this.authService.loginHealthcareProvider(
+      loginHealthcareProviderDto,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
