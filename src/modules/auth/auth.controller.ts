@@ -19,7 +19,7 @@ import {
 } from '../users/dto/patient.dto';
 
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { PatientResponseEntity } from 'src/users/entities/patient.entity';
+import { PatientResponseEntity } from 'src/modules/users/entities/patient.entity';
 import { JwtAuthGuard } from './jwt.guard';
 import {
   LoginHealthcareProviderDto,
