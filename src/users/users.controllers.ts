@@ -28,7 +28,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
   public async me(@Request() req) {
-    return new (req.user);
+    return new req.user();
   }
   @UseGuards(JwtAuthGuard)
   @ApiSecurity('access-key')
