@@ -15,14 +15,6 @@ export class LoginPatientDto {
 export class CreatePatientDto {
   @IsNotEmpty()
   @ApiProperty()
-  id: string;
-
-  @IsNotEmpty()
-  @ApiProperty()
-  compoundId: string;
-
-  @IsNotEmpty()
-  @ApiProperty()
   firstName: string;
   @IsNotEmpty()
   @ApiProperty()
