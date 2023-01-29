@@ -42,7 +42,12 @@ export class AuthController {
     @Body() loginPatientDto: LoginPatientDto,
   ): Promise<any> {
     const patient = await this.authService.login(loginPatientDto);
-    return new PatientResponseEntity('Login successful', true, patient);
+    return new PatientResponseEntity(
+      'Login successful',
+      true,
+      patient.user,
+      patient.token,
+    );
   }
 
   @Post('loginhealthcareprovider')

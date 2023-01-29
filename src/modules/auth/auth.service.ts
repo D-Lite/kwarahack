@@ -72,7 +72,12 @@ export class AuthService {
     // generate and sign token
     const token = this._createToken(user);
 
-    return user;
+    const final = {
+      token,
+      user,
+    };
+
+    return final;
   }
 
   async loginHealthcareProvider(
@@ -85,7 +90,11 @@ export class AuthService {
     // generate and sign token
     const token = this._createHealthcareToken(healthprovider);
 
-    return healthprovider;
+    const final = {
+      healthprovider,
+      token,
+    };
+    return final;
   }
 
   async updatePatientPassword(payload: UpdatePatientPasswordDto, id: string) {
@@ -110,19 +119,21 @@ export class AuthService {
   private _createToken({ compoundId }): any {
     const user: JwtPayload = { compoundId };
     const Authorization = this.jwtService.sign(user);
-    return {
-      expiresIn: process.env.EXPIRESIN,
-      Authorization,
-    };
+    return Authorization;
+    // return {
+    //   expiresIn: process.env.EXPIRESIN,
+    //   Authorization,
+    // };
   }
 
   private _createHealthcareToken({ stateId }): any {
     const user: JwtPayload = { stateId };
     const Authorization = this.jwtService.sign(user);
-    return {
-      expiresIn: process.env.EXPIRESIN,
-      Authorization,
-    };
+    return Authorization;
+    // return {
+    //   expiresIn: process.env.EXPIRESIN,
+    //   Authorization,
+    // };
   }
 
   async validatePatient(payload: JwtPayload): Promise<any> {

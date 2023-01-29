@@ -53,13 +53,25 @@ class PatientEntity implements Partial<Patient> {
    */
   @Expose()
   genotype: string;
+
+  /**
+   * @example 'KW58062820'
+   */
+  @Expose()
+  token: string;
 }
 
 export class PatientResponseEntity implements ResponseEntity<PatientEntity> {
-  constructor(message: string, success: boolean, data?: Partial<Patient>) {
+  constructor(
+    message: string,
+    success: boolean,
+    data?: Partial<Patient>,
+    token?: string,
+  ) {
     this.message = message;
     this.success = success;
     this.data = new PatientEntity(data);
+    this.token = token;
   }
 
   @Expose()
@@ -70,4 +82,7 @@ export class PatientResponseEntity implements ResponseEntity<PatientEntity> {
 
   @Expose()
   success: boolean;
+
+  @Expose()
+  token: string;
 }
