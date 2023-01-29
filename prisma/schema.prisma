@@ -6,23 +6,23 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Patient {
   id                  String   @id @default(uuid())
-  compoundId          String   @unique @map("compound_id")// generated from our end
+  compoundId          String   @unique @map("compound_id") // generated from our end
   firstName           String   @map("first_name")
   lastName            String   @map("last_name")
   phoneNumber         String   @unique @map("phone_number")
   password            String
   email               String?  @unique
   createdDate         DateTime @default(now()) @map("created_date")
-  lastUpdated         DateTime @default(now()) @map("last_updated") @updatedAt
+  lastUpdated         DateTime @default(now()) @updatedAt @map("last_updated")
   dateOfBirth         DateTime @map("date_of_birth")
-  allergies           String[]  @map("allergies")
-  knownDiseaseHistory String[]  @map("known_disease_history")
+  allergies           String[] @map("allergies")
+  knownDiseaseHistory String[] @map("known_disease_history")
   bloodGroup          String?  @map("blood_group")
   genotype            String?  @map("genotype")
 
@@ -39,8 +39,8 @@ model Workforce {
   username    String           @unique
   idNumber    String?          @map("id_number")
   isAvailable Boolean          @default(false) @map("is_available")
-  createdDate DateTime @default(now()) @map("created_date")
-  lastUpdated DateTime @default(now()) @map("last_updated") @updatedAt
+  createdDate DateTime         @default(now()) @map("created_date")
+  lastUpdated DateTime         @default(now()) @updatedAt @map("last_updated")
 
   @@map("workforces")
 }

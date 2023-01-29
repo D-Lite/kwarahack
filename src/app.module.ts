@@ -3,14 +3,12 @@ import { APP_FILTER } from '@nestjs/core';
 import * as Sentry from '@sentry/node';
 import '@sentry/tracing';
 
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SentryModule } from './sentry/sentry.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-
 
 @Module({
   imports: [
