@@ -1,3 +1,0 @@
-[phases.migrate]
-  dependsOn = ['build']
-  cmds = ['yarn prisma migrate deploy']
