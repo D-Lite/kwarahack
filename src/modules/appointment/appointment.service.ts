@@ -14,11 +14,7 @@ export class AppointmentService {
 
   async createAppointment(createAppointmentDTO: AppointmentDto) {
     const appointment = await this.prisma.appointment.create({
-      data: {
-        patientId: createAppointmentDTO.patientId,
-        confirm: true,
-        selectedDate: createAppointmentDTO.selectedDate,
-      },
+      data: createAppointmentDTO,
     });
 
     return appointment;
