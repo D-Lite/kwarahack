@@ -11,10 +11,6 @@ export class AppointmentDto {
   @IsNotEmpty()
   patientId: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  workforceId: string;
-
   @IsNotEmpty()
   @ApiProperty()
   @Type(() => Date)
