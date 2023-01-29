@@ -1,11 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { CreatePatientDto, LoginPatientDto } from '../users/dto/patient.dto';
+
+import {
+  CreatePatientDto,
+  LoginPatientDto,
+  UpdatePatientPasswordDto,
+} from '../users/dto/patient.dto';
 import { JwtPayload } from './jwt.strategy';
 import { PrismaService } from '../prisma/prisma.service';
 import { Patient } from '@prisma/client';
-import { hash } from 'bcrypt';
 // import {User} from "../users/user.entity";
 
 @Injectable()
@@ -16,22 +21,22 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  async register(patientDto: CreatePatientDto): Promise<RegistrationStatus> {
-    let status: GenericStatus<Patient> = {
+  async register(patientDto: CreatePatientDto) {
+    /* let status: GenericStatus<Patient> = {
       success: true,
       message: 'ACCOUNT_CREATE_SUCCESS',
-      data: patientDto
-    };
+      data: ,
+    }; */
+    let patient: Patient;
 
     try {
-      status.data = await this.usersService.createPatient(patientDto);
+      patient = await this.usersService.createPatient(patientDto);
     } catch (err) {
-      status = {
-        success: false,
-        message: err,
-      };
+      // You can catch and then throw more specific errors here
+      throw err;
     }
-    return status;
+
+    return patient;
   }
 
   async login(loginPatientDto: LoginPatientDto): Promise<any> {
@@ -47,6 +52,25 @@ export class AuthService {
     };
   }
 
+  async updatePatientPassword(payload: UpdatePatientPasswordDto, id: string) {
+    const patient = await this.prisma.patient.findUnique({
+      where: { id },
+    });
+
+    if (!patient) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+    // compare password
+    const areEqual = await compare(payload.old_password, patient.password);
+    if (!areEqual) {
+      throw new HttpException('Invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return this.prisma.patient.update({
+      where: { id },
+      data: { password: await hash(payload.new_password, 10) },
+    });
+  }
   private _createToken({ compoundId }): any {
     const user: JwtPayload = { compoundId };
     const Authorization = this.jwtService.sign(user);
