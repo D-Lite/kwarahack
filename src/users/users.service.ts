@@ -7,6 +7,8 @@ import {
 import { compare, hash } from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import generateUID from '../commons/utils/generatePassword';
+import { HealthcareProvider } from '@prisma/client';
+import { LoginHealthcareProviderDto } from './dto/healthcare-provider.dto';
 
 @Injectable()
 export class UsersService {
@@ -75,6 +77,28 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  // use by auth module to login healthcare provider
+  async findHealthcareByLogin({
+    stateId,
+    password,
+  }: LoginHealthcareProviderDto) {
+    const healthcareprovider = await this.prisma.healthcareProvider.findFirst({
+      where: { stateId },
+    });
+
+    if (!healthcareprovider) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    // compare passwords
+    const areEqual = await compare(password, healthcareprovider.password);
+    if (!areEqual) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return healthcareprovider;
   }
 
   // use by auth module to get user in database

@@ -12,11 +12,6 @@ export class LoginPatientDto {
   readonly password: string;
 }
 
-//   createdDate         DateTime @default(now()) @map("created_date")
-// lastUpdated         DateTime @default(now()) @map("last_updated") @updatedAt
-//   knownDiseaseHistory String?  @map("known_disease_history")
-//   bloodGroup          String?  @map("blood_group")
-//   genotype            String?  @map("genotype")
 export class CreatePatientDto {
   @IsNotEmpty()
   @ApiProperty()

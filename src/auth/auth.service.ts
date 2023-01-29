@@ -11,6 +11,7 @@ import {
 import { JwtPayload } from './jwt.strategy';
 import { PrismaService } from '../prisma/prisma.service';
 import { Patient } from '@prisma/client';
+import { LoginHealthcareProviderDto } from '../users/dto/healthcare-provider.dto';
 // import {User} from "../users/user.entity";
 
 @Injectable()
@@ -52,6 +53,22 @@ export class AuthService {
     };
   }
 
+  async loginHealthcareProvider(
+    loginHealthcareProviderDto: LoginHealthcareProviderDto,
+  ): Promise<any> {
+    const healthprovider = await this.usersService.findHealthcareByLogin(
+      loginHealthcareProviderDto,
+    );
+
+    // generate and sign token
+    const token = this._createHealthcareToken(healthprovider);
+
+    return {
+      ...token,
+      data: healthprovider,
+    };
+  }
+
   async updatePatientPassword(payload: UpdatePatientPasswordDto, id: string) {
     const patient = await this.prisma.patient.findUnique({
       where: { id },
@@ -73,6 +90,15 @@ export class AuthService {
   }
   private _createToken({ compoundId }): any {
     const user: JwtPayload = { compoundId };
+    const Authorization = this.jwtService.sign(user);
+    return {
+      expiresIn: process.env.EXPIRESIN,
+      Authorization,
+    };
+  }
+
+  private _createHealthcareToken({ stateId }): any {
+    const user: JwtPayload = { stateId };
     const Authorization = this.jwtService.sign(user);
     return {
       expiresIn: process.env.EXPIRESIN,

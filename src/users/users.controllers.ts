@@ -23,28 +23,28 @@ import { UpdatePatientPasswordDto } from './dto/patient.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @ApiSecurity('access-key')
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get('me')
-  public async me(@Request() req) {
-    return new req.user();
-  }
-  @UseGuards(JwtAuthGuard)
-  @ApiSecurity('access-key')
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Put('update/password')
-  public async updatePassword(
-    @Request() req,
-    @Body()
-    updatePatientPasswordDto: UpdatePatientPasswordDto,
-  ) {
-    await this.usersService.updatePatientPassword(
-      updatePatientPasswordDto,
-      req.user.id,
-    );
-    return {
-      message: 'password_update_success',
-    };
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @ApiSecurity('access-key')
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Get('me')
+  // public async me(@Request() req) {
+  //   return new req.user();
+  // }
+  // @UseGuards(JwtAuthGuard)
+  // @ApiSecurity('access-key')
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Put('update/password')
+  // public async updatePassword(
+  //   @Request() req,
+  //   @Body()
+  //   updatePatientPasswordDto: UpdatePatientPasswordDto,
+  // ) {
+  //   await this.usersService.updatePatientPassword(
+  //     updatePatientPasswordDto,
+  //     req.user.id,
+  //   );
+  //   return {
+  //     message: 'password_update_success',
+  //   };
+  // }
 }
