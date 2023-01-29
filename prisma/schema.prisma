@@ -47,7 +47,6 @@ model Workforce {
   lastUpdated DateTime         @default(now()) @updatedAt @map("last_updated")
 
   appointment   Appointment[]
-  medicalrecord MedicalRecord[]
 
   @@map("workforces")
 }
@@ -98,8 +97,6 @@ model MedicalRecord {
   id              String    @id @default(uuid())
   patient         Patient   @relation(fields: [patientId], references: [compoundId])
   patientId       String    @map("patient_id")
-  workforce       Workforce @relation(fields: [workforceId], references: [id])
-  workforceId     String    @map("workforce_id")
   bodytemperature String?
   pulse           String?
   respiratoryrate String?
