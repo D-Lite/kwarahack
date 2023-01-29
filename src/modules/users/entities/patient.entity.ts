@@ -7,6 +7,12 @@ class PatientEntity implements Partial<Patient> {
   }
 
   /**
+   * @example 'KW58062820'
+   */
+  @Expose()
+  compoundId: string;
+
+  /**
    * @example 'Busari'
    */
   @Expose()

@@ -26,9 +26,10 @@ export class AppointmentController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/patients')
   async createAppointment(@Body() appointmentDto: AppointmentDto) {
-    const appointment = await this.appointmentService.createAppointment( {
-      data: appointmentDto,
-    });
+    const appointment = await this.appointmentService.createAppointment(
+      appointmentDto.patientId,
+      appointmentDto.selectedDate,
+    );
 
     return new AppointmentResponseEntity(
       'Appointment created Successfully',
