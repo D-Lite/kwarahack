@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -62,11 +63,15 @@ export class AppointmentController {
       appointmentId: appointmentDto.id,
       confirm: appointmentDto.confirm,
       doctorId: appointmentDto.workforceId,
+      patientId: appointmentDto.patientId,
     });
+
     return new AppointmentResponseEntity(
       'Appointment accepted successfully',
       true,
       appointment,
     );
   }
+
+
 }

@@ -36,24 +36,25 @@ export class AppointmentService {
       where: { id: appointmentId },
     });
 
-    if(!appointment) throw new AppointmentNotFoundException(id);
+    if(!appointment) throw new AppointmentNotFoundException(appointmentId);
     if (appointment.workforceId !== doctorId) throw new ForbiddenException();
 
     return this.prisma.appointment.update({
-      where: {id },
+      where: {id: appointmentId },
       data: {
         confirm: confirm,
       },
-      });
-}
+    });
+  }
 
-// get all appointment
+  // get all appointment
 
-async deleteAppointment(appointmentId: string, patientId: string) {
-  const appointment = await this.prisma.appointment.findUnique({ where: {id: appointmentId},});
+  async deleteAppointment(appointmentId: string, patientId: string) {
+    const appointment = await this.prisma.appointment.findUnique({ where: {id: appointmentId},});
 
-  if(!appointment) throw new AppointmentNotFoundException(appointmentId);
-  if (appointment.patientId !== patientId) throw new ForbiddenException();
+    if(!appointment) throw new AppointmentNotFoundException(appointmentId);
+    if (appointment.patientId !== patientId) throw new ForbiddenException();
 
-  await this.prisma.appointment.delete({where: { id: appointmentId }});
+    await this.prisma.appointment.delete({where: { id: appointmentId }});
+  }
 }
