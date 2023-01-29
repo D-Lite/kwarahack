@@ -46,8 +46,6 @@ model Workforce {
   createdDate DateTime         @default(now()) @map("created_date")
   lastUpdated DateTime         @default(now()) @updatedAt @map("last_updated")
 
-  appointment   Appointment[]
-
   @@map("workforces")
 }
 
@@ -81,10 +79,8 @@ model Appointment {
   id           String    @id @default(uuid())
   patient      Patient   @relation(fields: [patientId], references: [compoundId])
   patientId    String    @map("patient_id")
-  workforce    Workforce @relation(fields: [workforceId], references: [id])
-  workforceId  String    @map("workforce_id")
   selectedDate DateTime  @map("selected_date")
-  confirm      Boolean   @default(false)
+  confirm      Boolean   @default(true)
 }
 
 model HealthcareProvider {

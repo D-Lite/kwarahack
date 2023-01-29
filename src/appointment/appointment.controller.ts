@@ -39,34 +39,11 @@ export class AppointmentController {
     @Body() appointmentDto: AppointmentDto,
   ) {
     const appointment = await this.appointmentService.createAppointment(
-      appointmentDto.patientId,
-      appointmentDto.workforceId,
-      appointmentDto.selectedDate,
+      appointmentDto,
     );
 
     return new AppointmentResponseEntity(
       'Appointment created Successfully',
-      true,
-      appointment,
-    );
-  }
-
-  @Auth('workforce')
-  @ApiException(() => [AppointmentNotFoundException])
-  @HttpCode(HttpStatus.OK)
-  @Patch('/workforce/:doctorId/appointments')
-  async acceptAppointment(
-    @Param('id') workforceId: string,
-    @Body() appointmentDto: AppointmentDto,
-  ) {
-    const appointment = await this.appointmentService.acceptAppointment({
-      appointmentId: appointmentDto.id,
-      confirm: appointmentDto.confirm,
-      doctorId: appointmentDto.workforceId,
-      patientId: appointmentDto.patientId,
-    });
-    return new AppointmentResponseEntity(
-      'Appointment accepted successfully',
       true,
       appointment,
     );
