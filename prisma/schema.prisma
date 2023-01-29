@@ -6,28 +6,29 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Patient {
   id                  String   @id @default(uuid())
-  compoundId          String   @unique @map("compound_id")// generated from our end
+  compoundId          String   @unique @map("compound_id") // generated from our end
   firstName           String   @map("first_name")
   lastName            String   @map("last_name")
   phoneNumber         String   @unique @map("phone_number")
   password            String
   email               String?  @unique
   createdDate         DateTime @default(now()) @map("created_date")
-  lastUpdated         DateTime @default(now()) @map("last_updated") @updatedAt
+  lastUpdated         DateTime @default(now()) @updatedAt @map("last_updated")
   dateOfBirth         DateTime @map("date_of_birth")
-  allergies           String[]  @map("allergies")
-  knownDiseaseHistory String[]  @map("known_disease_history")
+  allergies           String[] @map("allergies")
+  knownDiseaseHistory String[] @map("known_disease_history")
   bloodGroup          String?  @map("blood_group")
   genotype            String?  @map("genotype")
 
-  appointment         Appointment[]
-  medicalrecord       MedicalRecord[]
+  appointment   Appointment[]
+  medicalrecord MedicalRecord[]
+
   @@map("patients")
 }
 
@@ -41,11 +42,12 @@ model Workforce {
   username    String           @unique
   idNumber    String?          @map("id_number")
   isAvailable Boolean          @default(false) @map("is_available")
-  createdDate DateTime @default(now()) @map("created_date")
-  lastUpdated DateTime @default(now()) @map("last_updated") @updatedAt
+  createdDate DateTime         @default(now()) @map("created_date")
+  lastUpdated DateTime         @default(now()) @updatedAt @map("last_updated")
 
-  appointment Appointment[]
-  medicalrecord  MedicalRecord[]
+  appointment   Appointment[]
+  medicalrecord MedicalRecord[]
+
   @@map("workforces")
 }
 
@@ -76,40 +78,34 @@ enum WorkforceIDType {
 }
 
 model Appointment {
-  id      String @id @default(uuid())
-  patient Patient @relation(fields: [patientId], references: [compoundId])
-  patientId String @map("patient_id")
-  workforce Workforce @relation(fields: [workforceId], references: [id])
-  workforceId String @map("workforce_id")
-  selectedDate DateTime @map("selected_date")
-  confirm Boolean @default(false)
-
-
+  id           String    @id @default(uuid())
+  patient      Patient   @relation(fields: [patientId], references: [compoundId])
+  patientId    String    @map("patient_id")
+  workforce    Workforce @relation(fields: [workforceId], references: [id])
+  workforceId  String    @map("workforce_id")
+  selectedDate DateTime  @map("selected_date")
+  confirm      Boolean   @default(false)
 }
 
-
 model MedicalRecord {
-  id          String @id @default(uuid())
-  patient     Patient @relation(fields: [patientId], references: [compoundId])
-  patientId   String @map("patient_id")
-  workforce Workforce @relation(fields: [workforceId], references: [id])
-  workforceId String @map("workforce_id")
-
-  bodytemperature       String?
-  pulse                 String?
-  respiratoryrate       String?
-  bloodsugar            String?
-  bodyfatpercent        String?
-  cholestrol            String?
-  hemoglobin            String?
-  whitebloodcell        String?
-  bmi                   String?
-  oxygenlevel           String?
-  bloodpressure         String?
-  weight                String?
-  createdDate         DateTime @default(now()) @map("created_date")
-
-
+  id              String    @id @default(uuid())
+  patient         Patient   @relation(fields: [patientId], references: [compoundId])
+  patientId       String    @map("patient_id")
+  workforce       Workforce @relation(fields: [workforceId], references: [id])
+  workforceId     String    @map("workforce_id")
+  bodytemperature String?
+  pulse           String?
+  respiratoryrate String?
+  bloodsugar      String?
+  bodyfatpercent  String?
+  cholestrol      String?
+  hemoglobin      String?
+  whitebloodcell  String?
+  bmi             String?
+  oxygenlevel     String?
+  bloodpressure   String?
+  weight          String?
+  createdDate     DateTime  @default(now()) @map("created_date")
 
   @@map("medicalrecords")
 }
